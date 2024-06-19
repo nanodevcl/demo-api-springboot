@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UsuarioController.class)
-public class UsuarioControllerTest {
+ class UsuarioControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,7 +28,7 @@ public class UsuarioControllerTest {
     private UsuarioService usuarioService;
 
     @Test
-    public void obtenerTodosLosUsuarios() throws Exception {
+     void obtenerTodosLosUsuarios() throws Exception {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan Perez");
@@ -43,7 +43,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void obtenerUsuarioPorId() throws Exception {
+     void obtenerUsuarioPorId() throws Exception {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan Perez");
@@ -58,7 +58,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void guardarUsuario() throws Exception {
+     void guardarUsuario() throws Exception {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan Perez");
@@ -74,7 +74,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void eliminarUsuario() throws Exception {
+     void eliminarUsuario() throws Exception {
         mockMvc.perform(delete("/api/usuarios/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());

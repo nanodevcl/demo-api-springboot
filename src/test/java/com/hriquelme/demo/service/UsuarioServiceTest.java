@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class UsuarioServiceTest {
+ class UsuarioServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
@@ -24,12 +24,12 @@ public class UsuarioServiceTest {
     private UsuarioService usuarioService;
 
     @BeforeEach
-    public void setUp() {
+     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testObtenerTodosLosUsuarios() {
+     void testObtenerTodosLosUsuarios() {
         Usuario usuario1 = new Usuario();
         usuario1.setId(1L);
         usuario1.setNombre("Juan");
@@ -52,7 +52,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testObtenerUsuarioPorId() {
+     void testObtenerUsuarioPorId() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan");
@@ -65,7 +65,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGuardarUsuario() {
+     void testGuardarUsuario() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan");
@@ -78,7 +78,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testEliminarUsuario() {
+     void testEliminarUsuario() {
         Long userId = 1L;
         doNothing().when(usuarioRepository).deleteById(userId);
 

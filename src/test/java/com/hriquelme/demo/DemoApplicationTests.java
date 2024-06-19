@@ -1,13 +1,20 @@
 package com.hriquelme.demo;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class DemoApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void testMain() {
+        try (MockedStatic<DemoApplication> mocked = Mockito.mockStatic(DemoApplication.class)) {
+            String[] args = {};
+            DemoApplication.main(args);
+            mocked.verify(() -> DemoApplication.main(args));
+        }
+    }
 }

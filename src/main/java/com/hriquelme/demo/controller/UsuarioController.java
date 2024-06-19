@@ -1,40 +1,48 @@
 package com.hriquelme.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.hriquelme.demo.model.Usuario;
-import com.hriquelme.demo.service.UsuarioService;
-
+import com.hriquelme.demo.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    @Qualifier("taskExecutor")
+    private Executor taskExecutor;
+
+    @Async("taskExecutor")
     @GetMapping
-    public List<Usuario> obtenerTodosLosUsuarios() {
-        return usuarioService.obtenerTodosLosUsuarios();
+    public CompletableFuture<List<Usuario>> obtenerTodosLosUsuarios() {
+        return CompletableFuture.supplyAsync(() -> usuarioRepository.findAll(), taskExecutor);
     }
 
+    @Async("taskExecutor")
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public CompletableFuture<Optional<Usuario>> obtenerUsuarioPorId(@PathVariable Long id) {
+        return CompletableFuture.supplyAsync(() -> usuarioRepository.findById(id), taskExecutor);
     }
 
+    @Async("taskExecutor")
     @PostMapping
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.guardarUsuario(usuario);
+    public CompletableFuture<Usuario> guardarUsuario(@RequestBody Usuario usuario) {
+        return CompletableFuture.supplyAsync(() -> usuarioRepository.save(usuario), taskExecutor);
     }
 
+    @Async("taskExecutor")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
-        usuarioService.eliminarUsuario(id);
-        return ResponseEntity.noContent().build();
+    public CompletableFuture<Void> eliminarUsuario(@PathVariable Long id) {
+        return CompletableFuture.runAsync(() -> usuarioRepository.deleteById(id), taskExecutor);
     }
 }
